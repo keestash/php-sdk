@@ -1,5 +1,5 @@
 {
-    "name": "keestash/sdk",
+    "name": "keestash/php-sdk",
     "description": "SDK for interacting with Keestash",
     "type": "library",
     "license": "AGPL-3.0-or-later",
