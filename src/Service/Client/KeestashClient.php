@@ -46,12 +46,12 @@ class KeestashClient
 
     /**
      * @param $path
-     * @param $body
+     * @param array $body
      * @param array $headers
      * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function post($path, $body, array $headers = []): ResponseInterface
+    public function post(string $path, array $body = [], array $headers = []): ResponseInterface
     {
         $headers['x-keestash-token'] = $this->apiCredentials->getUserToken();
         $headers['x-keestash-user'] = $this->apiCredentials->getUserHash();
@@ -70,7 +70,7 @@ class KeestashClient
      * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function postPublicEndpoint($path, $body): ResponseInterface
+    public function postPublicEndpoint(string $path, array $body = []): ResponseInterface
     {
         return $this->guzzleClient->post(
             $this->apiCredentials->getApiUrl() . $path,

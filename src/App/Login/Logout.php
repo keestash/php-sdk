@@ -19,13 +19,13 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\App\PasswordManager;
+namespace Keestash\Sdk\App\Login;
 
 use doganoo\DI\HTTP\IStatus;
 use Keestash\Sdk\Exception\SdkException;
 use Keestash\Sdk\Service\Client\KeestashClient;
 
-class Folder
+class Logout
 {
     private KeestashClient $keestashClient;
 
@@ -34,56 +34,19 @@ class Folder
         $this->keestashClient = $keestashClient;
     }
 
-
-    public function create(Entity\Folder $folder): array
+    public function login(string $username, string $password): array
     {
         $response = $this->keestashClient->post(
-            '/password_manager/node/create',
-            [
-                'name' => $folder->getName(),
-                'node_id' => $folder->getParent()
-            ]
-        );
+            '/logout/submit',
 
+        );
         if ($response->getStatusCode() !== IStatus::OK) {
             throw new SdkException();
         }
 
-        return json_decode(
-            (string)$response->getBody(),
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        );
+        return [
+            'user' => $response->getHeader('x-keestash-user')[0],
+            'token' => $response->getHeader('x-keestash-token')[0]
+        ];
     }
-
-    public function createByPath(
-        string   $path
-        , string $delimiter
-        , string $parentNodeId
-        , bool   $forceCreate
-    ): array
-    {
-        $response = $this->keestashClient->post(
-            '/password_manager/node/folder/create/path',
-            [
-                'path' => $path,
-                'delimiter' => $delimiter,
-                'parentNodeId' => $parentNodeId,
-                'forceCreate' => $forceCreate
-            ]
-        );
-
-        if ($response->getStatusCode() !== IStatus::OK) {
-            throw new SdkException();
-        }
-
-        return json_decode(
-            (string)$response->getBody(),
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        );
-    }
-
 }

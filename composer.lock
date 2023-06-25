@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5bb28826e19d085b1eeb13d66e38039",
+    "content-hash": "d47a1601eb23417a1c38ffcede48169a",
     "packages": [
         {
             "name": "doganoo/di-services",
