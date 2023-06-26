@@ -35,7 +35,7 @@ class Logout
         $this->keestashClient = $keestashClient;
     }
 
-    public function login(ApiCredentialsInterface $apiCredentials): array
+    public function logout(ApiCredentialsInterface $apiCredentials): array
     {
         $response = $this->keestashClient->post(
             '/logout/submit',
