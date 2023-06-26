@@ -30,33 +30,37 @@ use Psr\Http\Message\ResponseInterface;
 class KeestashClient
 {
     private ClientInterface $guzzleClient;
-    private ApiCredentialsInterface $apiCredentials;
+    private string $url;
 
     /**
      * @param ClientInterface $guzzleClient
      */
     public function __construct(
-        ClientInterface         $guzzleClient,
-        ApiCredentialsInterface $envService
+        ClientInterface $guzzleClient,
+        string          $url
     )
     {
         $this->guzzleClient = $guzzleClient;
-        $this->apiCredentials = $envService;
+        $this->url = $url;
     }
 
     /**
-     * @param $path
+     * @param string $path
      * @param array $body
-     * @param array $headers
+     * @param ApiCredentialsInterface $apiCredentials
      * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function post(string $path, array $body = [], array $headers = []): ResponseInterface
+    public function post(
+        string                  $path,
+        array                   $body,
+        ApiCredentialsInterface $apiCredentials
+    ): ResponseInterface
     {
-        $headers['x-keestash-token'] = $this->apiCredentials->getUserToken();
-        $headers['x-keestash-user'] = $this->apiCredentials->getUserHash();
+        $headers['x-keestash-token'] = $apiCredentials->getUserToken();
+        $headers['x-keestash-user'] = $apiCredentials->getUserHash();
         return $this->guzzleClient->post(
-            $this->apiCredentials->getApiUrl() . $path,
+            $this->url . $path,
             [
                 RequestOptions::JSON => $body,
                 RequestOptions::HEADERS => $headers
@@ -65,15 +69,15 @@ class KeestashClient
     }
 
     /**
-     * @param $path
-     * @param $body
+     * @param string $path
+     * @param array $body
      * @return ResponseInterface
      * @throws GuzzleException
      */
     public function postPublicEndpoint(string $path, array $body = []): ResponseInterface
     {
         return $this->guzzleClient->post(
-            $this->apiCredentials->getApiUrl() . $path,
+            $this->url . $path,
             [RequestOptions::JSON => $body]
         );
     }

@@ -23,6 +23,8 @@ namespace Keestash\Sdk\App\Login;
 
 use doganoo\DI\HTTP\IStatus;
 use Keestash\Sdk\Exception\SdkException;
+use Keestash\Sdk\Service\Api\ApiCredentials;
+use Keestash\Sdk\Service\Api\ApiCredentialsInterface;
 use Keestash\Sdk\Service\Client\KeestashClient;
 
 class Login
@@ -34,7 +36,7 @@ class Login
         $this->keestashClient = $keestashClient;
     }
 
-    public function login(string $username, string $password): array
+    public function login(string $username, string $password): ApiCredentialsInterface
     {
         $response = $this->keestashClient->postPublicEndpoint(
             '/login/submit',
@@ -44,9 +46,9 @@ class Login
             throw new SdkException();
         }
 
-        return [
-            'user' => $response->getHeader('x-keestash-user')[0],
-            'token' => $response->getHeader('x-keestash-token')[0]
-        ];
+        return new ApiCredentials(
+            $response->getHeader('x-keestash-user')[0],
+            $response->getHeader('x-keestash-token')[0]
+        );
     }
 }

@@ -21,9 +21,28 @@ declare(strict_types=1);
 
 namespace Keestash\Sdk\Service\Api;
 
-interface ApiCredentialsInterface
+class ApiCredentials implements ApiCredentialsInterface
 {
-    public function getUserToken(): string;
 
-    public function getUserHash(): string;
+    private string $userToken;
+    private string $userHash;
+
+    public function __construct(
+        string $userHash,
+        string $userToken
+    )
+    {
+        $this->userHash = $userHash;
+        $this->userToken = $userToken;
+    }
+
+    public function getUserToken(): string
+    {
+        return $this->userToken;
+    }
+
+    public function getUserHash(): string
+    {
+        return $this->userHash;
+    }
 }
