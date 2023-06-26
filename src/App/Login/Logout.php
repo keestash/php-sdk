@@ -23,6 +23,7 @@ namespace Keestash\Sdk\App\Login;
 
 use doganoo\DI\HTTP\IStatus;
 use Keestash\Sdk\Exception\SdkException;
+use Keestash\Sdk\Service\Api\ApiCredentialsInterface;
 use Keestash\Sdk\Service\Client\KeestashClient;
 
 class Logout
@@ -34,10 +35,12 @@ class Logout
         $this->keestashClient = $keestashClient;
     }
 
-    public function login(string $username, string $password): array
+    public function login(ApiCredentialsInterface $apiCredentials): array
     {
         $response = $this->keestashClient->post(
             '/logout/submit',
+            [],
+            $apiCredentials
 
         );
         if ($response->getStatusCode() !== IStatus::OK) {
