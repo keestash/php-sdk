@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Keestash
  *
@@ -22,6 +23,7 @@ namespace Keestash\Sdk\App\PasswordManager;
 
 use doganoo\DI\HTTP\IStatus;
 use Keestash\Sdk\Exception\SdkException;
+use Keestash\Sdk\Service\Api\ApiCredentialsInterface;
 use Keestash\Sdk\Service\Client\KeestashClient;
 
 class Credential
@@ -34,7 +36,7 @@ class Credential
     }
 
 
-    public function create(Entity\Credential $credential): array
+    public function create(Entity\Credential $credential, ApiCredentialsInterface $apiCredentials): array
     {
         $response = $this->keestashClient->post(
             '/password_manager/node/credential/create',
@@ -46,7 +48,8 @@ class Credential
                 ],
                 'parent' => $credential->getParent(),
                 'url' => $credential->getUrl()
-            ]
+            ],
+            $apiCredentials
         );
 
         if ($response->getStatusCode() !== IStatus::OK) {
