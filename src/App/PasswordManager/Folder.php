@@ -23,6 +23,7 @@ namespace Keestash\Sdk\App\PasswordManager;
 
 use doganoo\DI\HTTP\IStatus;
 use Keestash\Sdk\Exception\SdkException;
+use Keestash\Sdk\Service\Api\ApiCredentialsInterface;
 use Keestash\Sdk\Service\Client\KeestashClient;
 
 class Folder
@@ -35,14 +36,15 @@ class Folder
     }
 
 
-    public function create(Entity\Folder $folder): array
+    public function create(Entity\Folder $folder, ApiCredentialsInterface $apiCredentials): array
     {
         $response = $this->keestashClient->post(
             '/password_manager/node/create',
             [
                 'name' => $folder->getName(),
                 'node_id' => $folder->getParent()
-            ]
+            ],
+            $apiCredentials
         );
 
         if ($response->getStatusCode() !== IStatus::OK) {
@@ -58,10 +60,11 @@ class Folder
     }
 
     public function createByPath(
-        string   $path
-        , string $delimiter
-        , string $parentNodeId
-        , bool   $forceCreate
+        string                    $path
+        , string                  $delimiter
+        , string                  $parentNodeId
+        , bool                    $forceCreate
+        , ApiCredentialsInterface $apiCredentials
     ): array
     {
         $response = $this->keestashClient->post(
@@ -71,7 +74,8 @@ class Folder
                 'delimiter' => $delimiter,
                 'parentNodeId' => $parentNodeId,
                 'forceCreate' => $forceCreate
-            ]
+            ],
+            $apiCredentials
         );
 
         if ($response->getStatusCode() !== IStatus::OK) {
