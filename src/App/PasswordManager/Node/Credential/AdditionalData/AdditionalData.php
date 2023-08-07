@@ -52,7 +52,7 @@ class AdditionalData
             ],
         );
 
-        if ($response->getStatusCode() !== IStatus::OK) {
+        if ($response->getStatusCode() !== IStatus::CREATED) {
             throw new SdkException();
         }
     }
