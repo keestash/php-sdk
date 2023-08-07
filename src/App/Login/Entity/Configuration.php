@@ -19,30 +19,27 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\Service\Api;
+namespace Keestash\Sdk\App\Login\Entity;
 
-class ApiCredentials implements ApiCredentialsInterface
+class Configuration
 {
+    private bool $registerEnabled;
+    private bool $forgotPasswordEnabled;
 
-    private string $userToken;
-    private string $userHash;
-
-    public function __construct(
-        string $userHash,
-        string $userToken
-    )
+    public function __construct(bool $registerEnabled, bool $forgotPasswordEnabled)
     {
-        $this->userHash = $userHash;
-        $this->userToken = $userToken;
+        $this->registerEnabled = $registerEnabled;
+        $this->forgotPasswordEnabled = $forgotPasswordEnabled;
     }
 
-    public function getUserToken(): string
+    public function isRegisterEnabled(): bool
     {
-        return $this->userToken;
+        return $this->registerEnabled;
     }
 
-    public function getUserHash(): string
+    public function isForgotPasswordEnabled(): bool
     {
-        return $this->userHash;
+        return $this->forgotPasswordEnabled;
     }
+
 }

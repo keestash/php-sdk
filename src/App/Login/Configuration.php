@@ -22,12 +22,10 @@ declare(strict_types=1);
 namespace Keestash\Sdk\App\Login;
 
 use doganoo\DI\HTTP\IStatus;
-use Keestash\Sdk\App\Login\Entity\ApiCredentials;
 use Keestash\Sdk\Exception\SdkException;
-use Keestash\Sdk\Service\Api\ApiCredentialsInterface;
 use Keestash\Sdk\Service\Client\KeestashClient;
 
-class Login
+class Configuration
 {
     private KeestashClient $keestashClient;
 
@@ -36,19 +34,23 @@ class Login
         $this->keestashClient = $keestashClient;
     }
 
-    public function login(string $username, string $password): ApiCredentialsInterface
+    public function getConfiguration(): Entity\Configuration
     {
-        $response = $this->keestashClient->postPublicEndpoint(
-            '/login/submit',
-            ['user' => $username, 'password' => $password]
+        $response = $this->keestashClient->getPublicEndpoint(
+            '/app/configuration'
         );
         if ($response->getStatusCode() !== IStatus::OK) {
             throw new SdkException();
         }
 
-        return new ApiCredentials(
-            $response->getHeader('x-keestash-user')[0],
-            $response->getHeader('x-keestash-token')[0]
+        $parsedBody = json_decode(
+            (string)$response->getBody(),
+            true,
+            JSON_THROW_ON_ERROR
+        );
+        return new Entity\Configuration(
+            (bool)$parsedBody['registerEnabled'],
+            (bool)$parsedBody['forgotPasswordEnabled']
         );
     }
 }

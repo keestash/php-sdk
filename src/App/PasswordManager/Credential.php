@@ -35,11 +35,11 @@ class Credential
         $this->keestashClient = $keestashClient;
     }
 
-
     public function create(Entity\Credential $credential, ApiCredentialsInterface $apiCredentials): array
     {
         $response = $this->keestashClient->post(
             '/password_manager/node/credential/create',
+            $apiCredentials,
             [
                 'name' => $credential->getName(),
                 'username' => $credential->getUsername(),
@@ -49,7 +49,7 @@ class Credential
                 'parent' => $credential->getParent(),
                 'url' => $credential->getUrl()
             ],
-            $apiCredentials
+
         );
 
         if ($response->getStatusCode() !== IStatus::OK) {

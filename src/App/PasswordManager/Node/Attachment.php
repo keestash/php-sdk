@@ -19,14 +19,15 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\App\PasswordManager;
+namespace Keestash\Sdk\App\PasswordManager\Node;
 
 use doganoo\DI\HTTP\IStatus;
+use GuzzleHttp\Psr7\Utils;
 use Keestash\Sdk\Exception\SdkException;
 use Keestash\Sdk\Service\Api\ApiCredentialsInterface;
 use Keestash\Sdk\Service\Client\KeestashClient;
 
-class Folder
+class Attachment
 {
     private KeestashClient $keestashClient;
 
@@ -35,22 +36,29 @@ class Folder
         $this->keestashClient = $keestashClient;
     }
 
-
-    public function create(Entity\Folder $folder, ApiCredentialsInterface $apiCredentials): array
+    public function add(array $files, ApiCredentialsInterface $apiCredentials): array
     {
+        $multiPart = [];
+        foreach ($files as $file) {
+            if (!is_file($file)) {
+                continue;
+            }
+            $multiPart[] = [
+                'name' => basename($file),
+                'filename' => basename($file),
+                'contents' => Utils::tryFopen($file, 'r')
+            ];
+        }
         $response = $this->keestashClient->post(
-            '/password_manager/node/create',
+            '/password_manager/attachments/add',
             $apiCredentials,
-            [
-                'name' => $folder->getName(),
-                'node_id' => $folder->getParent()
-            ],
+            [],
+            $multiPart
         );
 
         if ($response->getStatusCode() !== IStatus::OK) {
             throw new SdkException();
         }
-
         return json_decode(
             (string)$response->getBody(),
             true,
@@ -58,36 +66,4 @@ class Folder
             JSON_THROW_ON_ERROR
         );
     }
-
-    public function createByPath(
-        string                    $path
-        , string                  $delimiter
-        , string                  $parentNodeId
-        , bool                    $forceCreate
-        , ApiCredentialsInterface $apiCredentials
-    ): array
-    {
-        $response = $this->keestashClient->post(
-            '/password_manager/node/folder/create/path',
-            $apiCredentials,
-            [
-                'path' => $path,
-                'delimiter' => $delimiter,
-                'parentNodeId' => $parentNodeId,
-                'forceCreate' => $forceCreate
-            ]
-        );
-
-        if ($response->getStatusCode() !== IStatus::OK) {
-            throw new SdkException();
-        }
-
-        return json_decode(
-            (string)$response->getBody(),
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        );
-    }
-
 }

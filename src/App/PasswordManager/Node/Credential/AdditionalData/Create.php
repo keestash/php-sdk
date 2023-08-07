@@ -19,14 +19,14 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\App\PasswordManager;
+namespace Keestash\Sdk\App\PasswordManager\Node\Credential\AdditionalData;
 
 use doganoo\DI\HTTP\IStatus;
 use Keestash\Sdk\Exception\SdkException;
 use Keestash\Sdk\Service\Api\ApiCredentialsInterface;
 use Keestash\Sdk\Service\Client\KeestashClient;
 
-class Folder
+class Create
 {
     private KeestashClient $keestashClient;
 
@@ -35,59 +35,26 @@ class Folder
         $this->keestashClient = $keestashClient;
     }
 
-
-    public function create(Entity\Folder $folder, ApiCredentialsInterface $apiCredentials): array
+    public function create(
+        int                     $credentialId,
+        string                  $key,
+        string                  $value,
+        ApiCredentialsInterface $apiCredentials
+    ): void
     {
         $response = $this->keestashClient->post(
-            '/password_manager/node/create',
+            '/password_manager/credential/additional_data/add',
             $apiCredentials,
             [
-                'name' => $folder->getName(),
-                'node_id' => $folder->getParent()
+                'credentialId' => $credentialId,
+                'key' => $key,
+                'value' => $value
             ],
         );
 
         if ($response->getStatusCode() !== IStatus::OK) {
             throw new SdkException();
         }
-
-        return json_decode(
-            (string)$response->getBody(),
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        );
-    }
-
-    public function createByPath(
-        string                    $path
-        , string                  $delimiter
-        , string                  $parentNodeId
-        , bool                    $forceCreate
-        , ApiCredentialsInterface $apiCredentials
-    ): array
-    {
-        $response = $this->keestashClient->post(
-            '/password_manager/node/folder/create/path',
-            $apiCredentials,
-            [
-                'path' => $path,
-                'delimiter' => $delimiter,
-                'parentNodeId' => $parentNodeId,
-                'forceCreate' => $forceCreate
-            ]
-        );
-
-        if ($response->getStatusCode() !== IStatus::OK) {
-            throw new SdkException();
-        }
-
-        return json_decode(
-            (string)$response->getBody(),
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        );
     }
 
 }

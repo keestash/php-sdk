@@ -19,36 +19,32 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\App\Login;
+namespace Keestash\Sdk\App\Login\Entity;
 
-use doganoo\DI\HTTP\IStatus;
-use Keestash\Sdk\Exception\SdkException;
 use Keestash\Sdk\Service\Api\ApiCredentialsInterface;
-use Keestash\Sdk\Service\Client\KeestashClient;
 
-class Logout
+class ApiCredentials implements ApiCredentialsInterface
 {
-    private KeestashClient $keestashClient;
 
-    public function __construct(KeestashClient $keestashClient)
+    private string $userToken;
+    private string $userHash;
+
+    public function __construct(
+        string $userHash,
+        string $userToken
+    )
     {
-        $this->keestashClient = $keestashClient;
+        $this->userHash = $userHash;
+        $this->userToken = $userToken;
     }
 
-    public function logout(ApiCredentialsInterface $apiCredentials): array
+    public function getUserToken(): string
     {
-        $response = $this->keestashClient->post(
-            '/logout/submit',
-            $apiCredentials
+        return $this->userToken;
+    }
 
-        );
-        if ($response->getStatusCode() !== IStatus::OK) {
-            throw new SdkException();
-        }
-
-        return [
-            'user' => $response->getHeader('x-keestash-user')[0],
-            'token' => $response->getHeader('x-keestash-token')[0]
-        ];
+    public function getUserHash(): string
+    {
+        return $this->userHash;
     }
 }

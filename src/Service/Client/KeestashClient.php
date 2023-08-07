@@ -53,8 +53,9 @@ class KeestashClient
      */
     public function post(
         string                  $path,
-        array                   $body,
-        ApiCredentialsInterface $apiCredentials
+        ApiCredentialsInterface $apiCredentials,
+        array                   $body = [],
+        array                   $multiPart = []
     ): ResponseInterface
     {
         $headers['x-keestash-token'] = $apiCredentials->getUserToken();
@@ -63,7 +64,8 @@ class KeestashClient
             $this->url . $path,
             [
                 RequestOptions::JSON => $body,
-                RequestOptions::HEADERS => $headers
+                RequestOptions::HEADERS => $headers,
+                RequestOptions::MULTIPART => $multiPart
             ]
         );
     }
@@ -74,11 +76,26 @@ class KeestashClient
      * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function postPublicEndpoint(string $path, array $body = []): ResponseInterface
+    public function postPublicEndpoint(
+        string $path,
+        array  $body = [],
+        array  $multiPart = []
+    ): ResponseInterface
     {
         return $this->guzzleClient->post(
             $this->url . $path,
-            [RequestOptions::JSON => $body]
+            [
+                RequestOptions::JSON => $body,
+                RequestOptions::MULTIPART => $multiPart
+            ]
+        );
+    }
+
+    public function getPublicEndpoint(string $path): ResponseInterface
+    {
+        return $this->guzzleClient->request(
+            'GET',
+            $this->url . $path
         );
     }
 }
