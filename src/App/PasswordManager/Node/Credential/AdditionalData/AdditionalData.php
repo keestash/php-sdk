@@ -26,7 +26,7 @@ use Keestash\Sdk\Exception\SdkException;
 use Keestash\Sdk\Service\Api\ApiCredentialsInterface;
 use Keestash\Sdk\Service\Client\KeestashClient;
 
-class Create
+class AdditionalData
 {
     private KeestashClient $keestashClient;
 
