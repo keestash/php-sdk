@@ -35,7 +35,7 @@ class Logout
         $this->keestashClient = $keestashClient;
     }
 
-    public function logout(ApiCredentialsInterface $apiCredentials): array
+    public function logout(ApiCredentialsInterface $apiCredentials): void
     {
         $response = $this->keestashClient->post(
             '/logout/submit',
@@ -46,9 +46,5 @@ class Logout
             throw new SdkException();
         }
 
-        return [
-            'user' => $response->getHeader('x-keestash-user')[0],
-            'token' => $response->getHeader('x-keestash-token')[0]
-        ];
     }
 }
