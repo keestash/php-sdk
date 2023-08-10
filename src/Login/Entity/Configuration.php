@@ -21,10 +21,26 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\Exception;
+namespace Keestash\Sdk\Login\Entity;
 
-use Exception;
-
-class SdkException extends Exception
+class Configuration
 {
+    private bool $registerEnabled;
+    private bool $forgotPasswordEnabled;
+
+    public function __construct(bool $registerEnabled, bool $forgotPasswordEnabled)
+    {
+        $this->registerEnabled = $registerEnabled;
+        $this->forgotPasswordEnabled = $forgotPasswordEnabled;
+    }
+
+    public function isRegisterEnabled(): bool
+    {
+        return $this->registerEnabled;
+    }
+
+    public function isForgotPasswordEnabled(): bool
+    {
+        return $this->forgotPasswordEnabled;
+    }
 }

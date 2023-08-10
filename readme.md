@@ -17,7 +17,7 @@ composer install keestash/sdk
 First, you need to implement the `\Keestash\Sdk\Service\Api\ApiCredentialsInterface` interface in order to provide the API URL and credentials to the SDK. The API URL needs to be there for all requests sending to Keestash whereas the user hash and user token are not necessarily need to present.
 
 ```php
-class ApiCredentialsProvider implements \Keestash\Sdk\Service\Api\ApiCredentialsInterface {
+class ApiCredentialsProvider implements \Keestash\Sdk\Login\Entity\ApiCredentialsInterface {
 
     public function getApiUrl(): string
     {
@@ -37,13 +37,14 @@ class ApiCredentialsProvider implements \Keestash\Sdk\Service\Api\ApiCredentials
 ```
 
 After providing the URL to your Keestash instance, you can call the login endpoint
+
 ```php
-$keestashClient = new \Keestash\Sdk\Service\Client\KeestashClient(
+$keestashClient = new \Keestash\Sdk\Client\KeestashClient(
     new GuzzleHttp\Client(),
     new ApiCredentialsProvider()
 );
 
-$login = new \Keestash\Sdk\App\Login\Login($keestashClient);
+$login = new \Keestash\Sdk\Login\Login($keestashClient);
 $data = $login->login(<username>, <password>);
 var_dump($data);
 ```
@@ -53,7 +54,7 @@ The login endpoint returns a user hash and token in case of success. You need th
 require __DIR__ . '/vendor/autoload.php';
 
 // create credential
-$c = new \Keestash\Sdk\App\PasswordManager\Entity\Credential(
+$c = new \Keestash\Sdk\PasswordManager\Entity\Credential(
     'test-password',
     'theusername',
     'topsecret',
@@ -61,12 +62,12 @@ $c = new \Keestash\Sdk\App\PasswordManager\Entity\Credential(
     'https://keestash.com'
 );
 
-$credential = new \Keestash\Sdk\App\PasswordManager\Credential($keestashClient);
+$credential = new \Keestash\Sdk\PasswordManager\Credential\Credential($keestashClient);
 $credential->create($c);
 
 // create folder
-$folder = new \Keestash\Sdk\App\PasswordManager\Folder($keestashClient);
-$folder->create(new \Keestash\Sdk\App\PasswordManager\Entity\Folder('test-folder', 'root'));
+$folder = new \Keestash\Sdk\PasswordManager\Folder\Folder($keestashClient);
+$folder->create(new \Keestash\Sdk\PasswordManager\Entity\Folder('test-folder', 'root'));
 ```
 
 ## Contributing

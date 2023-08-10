@@ -21,10 +21,22 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\Exception;
+namespace Keestash\Sdk\Settings\Entity\User;
 
-use Exception;
-
-class SdkException extends Exception
+class Configuration
 {
+    private int $uploadMaxFileSize;
+
+    public function __construct(int $uploadMaxFileSize)
+    {
+        $this->uploadMaxFileSize = $uploadMaxFileSize;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUploadMaxFileSize(): int
+    {
+        return $this->uploadMaxFileSize;
+    }
 }

@@ -21,10 +21,19 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\Exception;
+namespace Keestash\Sdk\PasswordManager\Entity;
 
-use Exception;
-
-class SdkException extends Exception
+class HealthCheck
 {
+    private bool $active;
+
+    public function __construct(bool $active)
+    {
+        $this->active = $active;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
 }

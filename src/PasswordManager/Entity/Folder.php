@@ -21,10 +21,32 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\Exception;
+namespace Keestash\Sdk\PasswordManager\Entity;
 
-use Exception;
-
-class SdkException extends Exception
+class Folder
 {
+    private string $name;
+    private string $parent;
+
+    public function __construct(string $name, string $parent)
+    {
+        $this->name = $name;
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParent(): string
+    {
+        return $this->parent;
+    }
 }

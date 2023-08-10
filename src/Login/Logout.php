@@ -21,10 +21,31 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\Exception;
+namespace Keestash\Sdk\Login;
 
-use Exception;
+use GuzzleHttp\Exception\GuzzleException;
+use Keestash\Sdk\Client\KeestashClient;
+use Keestash\Sdk\Login\Entity\ApiCredentialsInterface;
 
-class SdkException extends Exception
+class Logout
 {
+    private KeestashClient $keestashClient;
+
+    public function __construct(KeestashClient $keestashClient)
+    {
+        $this->keestashClient = $keestashClient;
+    }
+
+    /**
+     * @param ApiCredentialsInterface $apiCredentials
+     * @return void
+     * @throws GuzzleException
+     */
+    public function logout(ApiCredentialsInterface $apiCredentials): void
+    {
+        $this->keestashClient->post(
+            '/logout/submit',
+            $apiCredentials
+        );
+    }
 }

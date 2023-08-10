@@ -21,10 +21,36 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\Exception;
+namespace Keestash\Sdk\PasswordManager\Entity\Credential\AdditionalData;
 
-use Exception;
-
-class SdkException extends Exception
+class AdditionalData
 {
+    private string $id;
+    private string $key;
+    private int $nodeId;
+
+    public function __construct(
+        string $id,
+        string $key,
+        int $nodeId
+    ) {
+        $this->id = $id;
+        $this->key = $key;
+        $this->nodeId = $nodeId;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function getKey(): string
+    {
+        return $this->key;
+    }
+
+    public function getNodeId(): int
+    {
+        return $this->nodeId;
+    }
 }

@@ -21,10 +21,19 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\Exception;
+namespace Keestash\Sdk\Entity\Keestash;
 
-use Exception;
-
-class SdkException extends Exception
+class Response implements ResponseInterface
 {
+    private int $responseCode;
+
+    public function __construct(int $responseCode)
+    {
+        $this->responseCode = $responseCode;
+    }
+
+    public function getResponseCode(): int
+    {
+        return $this->responseCode;
+    }
 }

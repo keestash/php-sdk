@@ -21,10 +21,28 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\Exception;
+namespace Keestash\Sdk\Register\Entity;
 
-use Exception;
-
-class SdkException extends Exception
+class UserAdd
 {
+    private ?string $session;
+    private ?array $data;
+
+    public function __construct(
+        string $session,
+        array $data
+    ) {
+        $this->session = $session;
+        $this->data = $data;
+    }
+
+    public function getSession(): ?string
+    {
+        return $this->session;
+    }
+
+    public function getData(): ?array
+    {
+        return $this->data;
+    }
 }

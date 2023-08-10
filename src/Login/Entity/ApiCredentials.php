@@ -21,10 +21,28 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Keestash\Sdk\Exception;
+namespace Keestash\Sdk\Login\Entity;
 
-use Exception;
-
-class SdkException extends Exception
+class ApiCredentials implements ApiCredentialsInterface
 {
+    private string $userToken;
+    private string $userHash;
+
+    public function __construct(
+        string $userHash,
+        string $userToken
+    ) {
+        $this->userHash = $userHash;
+        $this->userToken = $userToken;
+    }
+
+    public function getUserToken(): string
+    {
+        return $this->userToken;
+    }
+
+    public function getUserHash(): string
+    {
+        return $this->userHash;
+    }
 }
