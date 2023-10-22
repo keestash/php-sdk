@@ -14,6 +14,9 @@
       "email": "dogan@dogan-ucar.de"
     }
   ],
+  "conflict": {
+    "stevebauman/unfinalize": "*"
+  },
   "minimum-stability": "stable",
   "require": {
     "php": ">=7.4",
